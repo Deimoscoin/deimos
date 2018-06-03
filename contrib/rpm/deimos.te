@@ -1,0 +1,81 @@
+policy_module(deimos, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type deimos_t;
+type deimos_exec_t;
+init_daemon_domain(deimos_t, deimos_exec_t)
+
+permissive deimos_t;
+
+type deimos_initrc_exec_t;
+init_script_file(deimos_initrc_exec_t)
+
+type deimos_conf_t;
+files_type(deimos_conf_t)
+
+type deimos_var_lib_t;
+files_type(deimos_var_lib_t)
+
+type deimos_var_run_t;
+files_type(deimos_var_run_t)
+
+type deimos_port_t;
+corenet_port(deimos_port_t)
+
+########################################
+#
+# deimos local policy
+#
+allow deimos_t self:process { fork };
+
+allow deimos_t self:fifo_file rw_fifo_file_perms;
+allow deimos_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(deimos_t, deimos_conf_t, deimos_conf_t)
+manage_files_pattern(deimos_t, deimos_conf_t, deimos_conf_t)
+
+manage_dirs_pattern(deimos_t, deimos_var_lib_t, deimos_var_lib_t)
+manage_files_pattern(deimos_t, deimos_var_lib_t, deimos_var_lib_t)
+files_var_lib_filetrans(deimos_t, deimos_var_lib_t, { dir file })
+
+manage_dirs_pattern(deimos_t, deimos_var_run_t, deimos_var_run_t)
+manage_files_pattern(deimos_t, deimos_var_run_t, deimos_var_run_t)
+
+sysnet_dns_name_resolve(deimos_t)
+corenet_all_recvfrom_unlabeled(deimos_t)
+
+allow deimos_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(deimos_t)
+corenet_tcp_sendrecv_generic_node(deimos_t)
+corenet_tcp_sendrecv_all_ports(deimos_t)
+corenet_tcp_bind_generic_node(deimos_t)
+
+gen_require(`
+    type deimos_port_t;
+')
+allow deimos_t deimos_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type deimos_port_t;
+')
+allow deimos_t deimos_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(deimos_t)
+
+files_read_etc_files(deimos_t)
+
+miscfiles_read_localization(deimos_t)
+
+sysnet_dns_name_resolve(deimos_t)
+
+allow deimos_t deimos_exec_t:file execute_no_trans;
+allow deimos_t self:process setsched;
+corecmd_exec_ls(deimos_t)
+corenet_tcp_connect_http_port(deimos_t)
+dev_read_urand(deimos_t)
+fs_getattr_xattr_fs(deimos_t)
+kernel_read_system_state(deimos_t)

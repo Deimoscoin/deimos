@@ -1,0 +1,157 @@
+
+## <summary>policy for deimos</summary>
+
+
+########################################
+## <summary>
+##	Transition to deimos.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`deimos_domtrans',`
+	gen_require(`
+		type deimos_t, deimos_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, deimos_exec_t, deimos_t)
+')
+
+
+########################################
+## <summary>
+##	Execute deimos server in the deimos domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`deimos_initrc_domtrans',`
+	gen_require(`
+		type deimos_initrc_exec_t;
+	')
+
+	init_labeled_script_domtrans($1, deimos_initrc_exec_t)
+')
+
+
+########################################
+## <summary>
+##	Search deimos lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`deimos_search_lib',`
+	gen_require(`
+		type deimos_var_lib_t;
+	')
+
+	allow $1 deimos_var_lib_t:dir search_dir_perms;
+	files_search_var_lib($1)
+')
+
+########################################
+## <summary>
+##	Read deimos lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`deimos_read_lib_files',`
+	gen_require(`
+		type deimos_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	read_files_pattern($1, deimos_var_lib_t, deimos_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage deimos lib files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`deimos_manage_lib_files',`
+	gen_require(`
+		type deimos_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_files_pattern($1, deimos_var_lib_t, deimos_var_lib_t)
+')
+
+########################################
+## <summary>
+##	Manage deimos lib directories.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`deimos_manage_lib_dirs',`
+	gen_require(`
+		type deimos_var_lib_t;
+	')
+
+	files_search_var_lib($1)
+	manage_dirs_pattern($1, deimos_var_lib_t, deimos_var_lib_t)
+')
+
+
+########################################
+## <summary>
+##	All of the rules required to administrate
+##	an deimos environment
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+## <param name="role">
+##	<summary>
+##	Role allowed access.
+##	</summary>
+## </param>
+## <rolecap/>
+#
+interface(`deimos_admin',`
+	gen_require(`
+		type deimos_t;
+		type deimos_initrc_exec_t;
+		type deimos_var_lib_t;
+	')
+
+	allow $1 deimos_t:process { ptrace signal_perms };
+	ps_process_pattern($1, deimos_t)
+
+	deimos_initrc_domtrans($1)
+	domain_system_change_exemption($1)
+	role_transition $2 deimos_initrc_exec_t system_r;
+	allow $2 system_r;
+
+	files_search_var_lib($1)
+	admin_pattern($1, deimos_var_lib_t)
+
+')
+
