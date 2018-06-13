@@ -1188,7 +1188,7 @@ CAmount GetDEISubsidy(int nHeight, const Consensus::Params& consensusParams) {
 	{
 		qSubsidy = 2157*COIN/2;
 		int64_t blocks = nHeight - consensusParams.workComputationChangeTarget;
-		int64_t months = blocks*15/(3600*24*365/12);
+		int64_t weeks = blocks*15/(3600*24*365/12);
 		for(int64_t i = 0; i < weeks; i++) qSubsidy -= (qSubsidy/300);
 		}
 
