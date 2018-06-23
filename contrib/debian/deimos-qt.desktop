@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=DeiMos Core
+Comment=Connect to the DeiMos P2P Network
+Comment[de]=Verbinde mit dem DeiMos peer-to-peer Netzwerk
+Comment[fr]=DeiMos, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=DeiMos, eşten eşe kriptografik sanal para birimi
+Exec=deimos-qt %u
+Terminal=false
+Type=Application
+Icon=deimos128
+MimeType=x-scheme-handler/deimos;
+Categories=Office;Finance;

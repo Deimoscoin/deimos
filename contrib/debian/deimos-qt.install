@@ -1,0 +1,6 @@
+usr/local/bin/deimos-qt usr/bin
+share/pixmaps/deimos32.xpm usr/share/pixmaps
+share/pixmaps/deimos16.xpm usr/share/pixmaps
+share/pixmaps/deimos128.png usr/share/pixmaps
+debian/deimos-qt.desktop usr/share/applications
+debian/deimos-qt.protocol usr/share/kde4/services/

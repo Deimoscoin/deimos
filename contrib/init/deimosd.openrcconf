@@ -1,0 +1,33 @@
+# /etc/conf.d/deimosd: config file for /etc/init.d/deimosd
+
+# Config file location
+#DEIMOSD_CONFIGFILE="/etc/deimos/deimos.conf"
+
+# What directory to write pidfile to?  (created and owned by $DEIMOSD_USER)
+#DEIMOSD_PIDDIR="/var/run/deimosd"
+
+# What filename to give the pidfile
+#DEIMOSD_PIDFILE="${DEIMOSD_PIDDIR}/deimosd.pid"
+
+# Where to write deimosd data (be mindful that the blockchain is large)
+#DEIMOSD_DATADIR="/var/lib/deimosd"
+
+# User and group to own deimosd process
+#DEIMOSD_USER="deimos"
+#DEIMOSD_GROUP="deimos"
+
+# Path to deimosd executable
+#DEIMOSD_BIN="/usr/bin/deimosd"
+
+# Nice value to run deimosd under
+#DEIMOSD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+DEIMOSD_OPTS="-disablewallet"
+
+# The timeout in seconds OpenRC will wait for deimosd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+DEIMOSD_SIGTERM_TIMEOUT=60
