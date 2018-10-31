@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  deimosd The deimos core server.
+#
+#
+# chkconfig: 345 80 20
+# description: deimosd
+# processname: deimosd
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/deimosd, see below
+if [ -f /etc/sysconfig/deimosd ]; then
+        . /etc/sysconfig/deimosd
+fi
+
+RETVAL=0
+
+prog=deimosd
+# you can override the lockfile via DEIMOSD_LOCKFILE in /etc/sysconfig/deimosd
+lockfile=${DEIMOSD_LOCKFILE-/var/lock/subsys/deimosd}
+
+# deimosd defaults to /usr/bin/deimosd, override with DEIMOSD_BIN
+deimosd=${DEIMOSD_BIN-/usr/bin/deimosd}
+
+# deimosd opts default to -disablewallet, override with DEIMOSD_OPTS
+deimosd_opts=${DEIMOSD_OPTS--disablewallet}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $deimosd $deimosd_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac

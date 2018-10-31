@@ -1,0 +1,22 @@
+[Unit]
+Description=DeiMos's distributed currency daemon
+After=network.target
+
+[Service]
+User=deimos
+Group=deimos
+
+Type=forking
+PIDFile=/var/lib/deimosd/deimosd.pid
+ExecStart=/usr/bin/deimosd -daemon -pid=/var/lib/deimosd/deimosd.pid \
+-conf=/etc/deimos/deimos.conf -datadir=/var/lib/deimosd -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
