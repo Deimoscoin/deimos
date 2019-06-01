@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=DeimOS Core
+Comment=Connect to the DeimOS P2P Network
+Comment[de]=Verbinde mit dem DeimOS peer-to-peer Netzwerk
+Comment[fr]=DeimOS, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=DeimOS, eşten eşe kriptografik sanal para birimi
+Exec=deimos-qt %u
+Terminal=false
+Type=Application
+Icon=deimos128
+MimeType=x-scheme-handler/deimos;
+Categories=Office;Finance;
+StartupWMClass=DeimOS-qt
