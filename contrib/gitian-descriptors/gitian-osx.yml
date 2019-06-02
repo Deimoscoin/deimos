@@ -2,7 +2,7 @@
 name: "deimos-osx-10.3.2"
 enable_cache: true
 suites:
-- "trusty"
+- "bionic"
 architectures:
 - "amd64"
 packages:
